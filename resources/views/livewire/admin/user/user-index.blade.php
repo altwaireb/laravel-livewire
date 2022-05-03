@@ -1,4 +1,10 @@
-<div>
+<div wire:init="loadItems">
+
+    <div wire:loading class="w-full">
+        <div class="flex justify-center items-center mt-32">
+            <x-svg.svg-spinner class="w-24 h-24 fill-primary-700 dark:fill-primary-400"/>
+        </div>
+    </div>
 
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800 text-primary-700 dark:text-primary-400">
@@ -6,7 +12,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12" wire:loading.remove>
         <div class="pr-0 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="p-5 overflow-hidden text-gray-800 shadow-xl lg:px-0 sm:px-10 bg-gray-50 sm:rounded-lg lg:rounded-3xl dark:bg-gray-900 dark:text-gray-400">
                 <div class="flex flex-wrap items-center">
@@ -70,6 +76,7 @@
                                     @if($trashed)
                                         <option value="deleted_at">{{ __('app.deleted_at') }}</option>
                                     @else
+                                        <option value="last_seen">{{ __('user.last_seen') }}</option>
                                         <option value="created_at">{{ __('app.created_at') }}</option>
                                         <option value="updated_at">{{ __('app.updated_at') }}</option>
                                     @endif

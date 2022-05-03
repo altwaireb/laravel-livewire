@@ -22,6 +22,13 @@ class UserIndex extends Component
 
     protected $listeners = [ 'refreshParent' => '$refresh'];
 
+    public $readyToLoad = false;
+
+    public function loadItems()
+    {
+        $this->readyToLoad = true;
+    }
+
     public function updatingTerm(){
        $this->resetPage();
     }
@@ -101,7 +108,7 @@ class UserIndex extends Component
     public function render()
     {
         return view('livewire.admin.user.user-index',[
-            'users' => $this->getItem(),
+            'users' => $this->readyToLoad ? $this->getItem() : [],
             'roles' => Role::all()->pluck('name', 'id'),
             'countries' => Country::all()->pluck('name' , 'id')
         ])->layout('layouts.admin');
