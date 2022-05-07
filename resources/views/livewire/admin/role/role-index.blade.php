@@ -8,7 +8,7 @@
 
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800 text-primary-700 dark:text-primary-400">
-            {{ __('user.users') }}
+            {{ __('role.roles') }}
         </h2>
     </x-slot>
 
@@ -22,11 +22,11 @@
                                 <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300"> {{ __('user.users') }}</h3>
                             </div>
                             <div class="ml-4">
-                                @can('create' , \App\Models\User::class)
+                                @can('create' , \App\Models\Role::class)
                                     <x-jet-button wire:click="selectedItem('create',null)"
                                                   class="text-white rounded-lg dark:text-gray-300 bg-primary-600 dark:bg-primary-700 hover:bg-primary-700 focus:border-primary-900 focus:ring-primary-300">
                                         <x-svg.svg-plus class="w-5 h-5"/>
-                                        {{ __('app.create') }}   {{ __('user.user') }}
+                                        {{ __('app.create') }}   {{ __('role.role') }}
                                     </x-jet-button>
                                 @endcan
                             </div>
@@ -42,41 +42,35 @@
 
                             <div class="col-span-3 md:col-span-2 lg:col-span-1">
                                 <x-jet-label class="text-xs" for="select"
-                                             value="{{ __('app.By') }} {{ __('role.role') }}"/>
-                                <x-select wire:model="role" wire:key="roleTerm" class="mt-1">
-                                    <option value="">{{ __('app.All') }} {{ __('role.roles') }}</option>
-                                    @forelse($roles as $key => $value)
-                                        <option value="{{ $key }}">{{ $value }}</option>
+                                             value="{{ __('app.By') }} {{ __('permission.permission') }}"/>
+                                <x-select wire:model="permissionSearch" wire:key="permissionSearch" class="mt-1">
+                                    <option value="">{{ __('app.All') }} {{ __('permission.permissions') }}</option>
+                                    @forelse($permissions->unique('table_name')->pluck('table_name') as $key => $value)
+                                        <optgroup label="{{ $value ?? __('app.general') }}">
+                                            @foreach($permissions as $permission)
+                                                @if($permission->table_name === $value)
+                                                    <option value="{{ $permission->id }}">{{ $permission->name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </optgroup>
                                     @empty
                                     @endforelse
                                 </x-select>
                             </div>
 
-                            <div class="col-span-3 md:col-span-2 lg:col-span-1">
-                                <x-jet-label class="text-xs" for="select"
-                                             value="{{ __('app.By') }} {{ __('country.country') }}"/>
-                                <x-select wire:model="country" wire:key="countryTerm" class="mt-1">
-                                    <option value="">{{ __('app.All') }} {{ __('country.countries') }}</option>
-                                    @forelse($countries as $key => $value)
-                                        <option value="{{ $key }}">{{ $value }}</option>
-                                    @empty
-                                    @endforelse
-                                </x-select>
-                            </div>
 
                             <div class="col-span-3 md:col-span-2 lg:col-span-1">
                                 <x-jet-label class="text-xs" for="select" value="{{ __('app.OrderBy') }}"/>
                                 <x-select wire:model="orderBy" class="mt-1">
                                     <option value="id">{{ __('app.id') }}</option>
-                                    <option value="name">{{ __('user.name') }}</option>
-                                    <option value="username">{{ __('user.username') }}</option>
-                                    <option value="email">{{ __('user.email') }}</option>
-                                    <option value="role_id">{{ __('user.role') }}</option>
-                                    <option value="country_id">{{ __('user.country') }}</option>
+                                    <option value="name">{{ __('role.name') }}</option>
+                                    <option value="key">{{ __('role.key') }}</option>
+                                    <option value="color">{{ __('role.color') }}</option>
                                     @if($trashed)
+                                        <option value="user_trashed_count">{{ __('role.user_trashed_count') }}</option>
                                         <option value="deleted_at">{{ __('app.deleted_at') }}</option>
                                     @else
-                                        <option value="last_seen">{{ __('user.last_seen') }}</option>
+                                        <option value="user_count">{{ __('role.user_count') }}</option>
                                         <option value="created_at">{{ __('app.created_at') }}</option>
                                         <option value="updated_at">{{ __('app.updated_at') }}</option>
                                     @endif
@@ -115,87 +109,59 @@
                             <thead>
                             <tr class="text-sm font-semibold text-gray-500 border-y ltr:text-left rtl:text-right dark:border-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/30">
                                 <th class="w-10 px-2 py-3 text-center">{{ __('app.id') }}</th>
-                                <th class="px-4 py-3">
-                                    <span>{{ __('user.name') }}</span>
-                                    <span class="text-xx">/ {{ __('user.username') }}</span>
-                                </th>
-                                <th class="px-2 py-3 text-center">{{ __('user.email') }}</th>
-                                <th class="px-2 py-3 text-center">{{ __('user.role') }}</th>
-                                <th class="px-2 py-3 text-center">{{ __('user.country') }}</th>
+                                <th class="px-2 py-3 text-center">{{ __('role.name') }}</th>
+                                <th class="px-2 py-3 text-center">{{ __('role.key') }}</th>
+                                <th class="px-2 py-3 text-center">{{ __('role.color') }}</th>
+                                <th class="px-2 py-3 text-center">{{ __('role.user_count') }}</th>
                                 <th class="px-2 py-3 text-center">{{ $trashed ? __('app.deleted_at') : __('app.created_at') }}</th>
                                 <th class="px-2 py-3 text-center">{{ __('app.actions') }}</th>
                             </tr>
                             </thead>
                             <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-900">
-                            @forelse($users as $user)
+                            @forelse($roles as $role)
                                 <tr class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 hover:dark:text-gray-200 hover:bg-gray-100 hover:dark:bg-gray-700">
                                     <td class="px-2 py-3 text-center text-xx">
-                                        {{ $user->id }}
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center text-sm">
-                                            <!-- Avatar with inset shadow -->
-                                            <div class="relative hidden w-10 h-10 rounded-full ltr:mr-3 rtl:ml-3 md:block">
-                                                <img class="object-cover w-full h-full rounded-full"
-                                                     src="{{ $user->profile_photo_url }}"
-                                                     alt="..."
-                                                />
-                                                <div class="absolute bottom-0 w-2 h-2 {{ $user->isOnline() ? 'bg-green-500' : 'bg-gray-500' }} rounded-full ltr:left-0 rtl:right-0 ltr:ml-1 rtl:mr-1"></div>
-                                                <div class="absolute inset-0 rounded-full shadow-inner"
-                                                     aria-hidden="true"></div>
-                                            </div>
-                                            <div>
-                                                <span class="font-semibold">{{ $user->name }}</span>
-                                                <span class="block text-xs text-gray-600 lowercase dark:text-gray-400">{{ $user->username }}</span>
-                                            </div>
-                                        </div>
+                                        {{ $role->id }}
                                     </td>
                                     <td class="px-2 py-3 text-sm text-center lowercase">
-                                        {{ $user->email }}
+                                        {{ $role->name }}
+                                    </td>
+                                    <td class="px-2 py-3 text-sm text-center lowercase">
+                                        {{ $role->key }}
                                     </td>
                                     <td class="px-2 py-3 text-xs text-center">
-                                        @if($user->role)
-                                        <span class="px-2 py-1 font-semibold leading-tight rounded-full {{ $user->role->color }}">
-                                            {{ $user->role->name }}
+                                        <span class="px-2 py-1 font-semibold leading-tight rounded-full {{ $role->color }}">
+                                            {{ $role->name }}
                                         </span>
-                                        @elseif($user->role_id)
-                                            <span class="px-2 py-1 font-semibold line-through leading-tight rounded-full {{ $user->role()->withTrashed()->first()->color }}">
-                                            {{ $user->role()->withTrashed()->first()->name }}
-                                            </span>
-                                        @endif
                                     </td>
                                     <td class="px-2 py-3 text-sm text-center">
-                                        @if($user->country)
-                                            {{ $user->country->name }}
-                                        @elseif($user->country_id)
-                                            <span class="line-through">{{ $user->country()->withTrashed()->first()->name }}</span>
-                                        @endif
+                                        {{ $trashed ? $role->user_trashed_count : $role->user_count }}
                                     </td>
                                     <td class="px-2 py-3 text-sm text-center">
-                                        {{ $trashed ? $user->deleted_at->diffForHumans() : $user->created_at->diffForHumans() }}
+                                        {{ $trashed ? $role->deleted_at->diffForHumans() : $role->created_at->diffForHumans() }}
                                     </td>
                                     <td class="px-4 py-3">
                                         <div class="flex items-center justify-between gap-1 text-sm text-center">
 
                                             @if($trashed)
-                                                @can('restore', $user)
-                                                    <x-jet-button wire:click="selectedItem('restore',{{ $user->id }})"
+                                                @can('restore', $role)
+                                                    <x-jet-button wire:click="selectedItem('restore',{{ $role->id }})"
                                                                   class="px-2">
                                                         <x-svg.svg-restore class="w-5 h-5"/>
                                                     </x-jet-button>
                                                 @endcan
 
-                                                @can('forceDelete', $user)
+                                                @can('forceDelete', $role)
                                                     <x-jet-button
-                                                            wire:click="selectedItem('forceDelete',{{ $user->id }})"
+                                                            wire:click="selectedItem('forceDelete',{{ $role->id }})"
                                                             class="px-2">
                                                         <x-svg.svg-force-delete class="w-5 h-5"/>
                                                     </x-jet-button>
                                                 @endcan
 
                                             @else
-                                                @can('update', $user)
-                                                    <x-jet-button wire:click="selectedItem('update',{{ $user->id }})"
+                                                @can('update', $role)
+                                                    <x-jet-button wire:click="selectedItem('update',{{ $role->id }})"
                                                                   class="px-2">
                                                         <x-svg.svg-update class="w-5 h-5"/>
                                                     </x-jet-button>
@@ -203,16 +169,16 @@
 
 
 
-                                                @can('view', $user)
-                                                    <x-jet-button wire:click="selectedItem('show',{{ $user->id }})"
+                                                @can('view', $role)
+                                                    <x-jet-button wire:click="selectedItem('show',{{ $role->id }})"
                                                                   class="px-2">
                                                         <x-svg.svg-show class="w-5 h-5"/>
                                                     </x-jet-button>
                                                 @endcan
 
 
-                                                @can('delete', $user)
-                                                    <x-jet-button wire:click="selectedItem('delete',{{ $user->id }})"
+                                                @can('delete', $role)
+                                                    <x-jet-button wire:click="selectedItem('delete',{{ $role->id }})"
                                                                   class="px-2">
                                                         <x-svg.svg-delete class="w-5 h-5"/>
                                                     </x-jet-button>
@@ -236,9 +202,9 @@
                         </table>
                     </div>
 
-                    @if(!empty($users))
+                    @if(!empty($roles))
                         <div class="px-4 py-3 border-t dark:border-gray-700">
-                            {{ $users->links() }}
+                            {{ $roles->links() }}
                         </div>
                     @endif
                 </div>
@@ -246,10 +212,6 @@
         </div>
     </div>
 
-    <livewire:admin.user.user-create :countries="$countries" :roles="$roles"/>
-    <livewire:admin.user.user-update :countries="$countries" :roles="$roles"/>
-    <livewire:admin.user.user-show/>
-    <livewire:admin.user.user-delete/>
 
 
 </div>

@@ -3,8 +3,12 @@
         {{ __('app.admin index') }}
     </x-jet-responsive-nav-link>
 
-    <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+    <x-jet-responsive-nav-link href="{{ route('admin.user.index') }}" :active="request()->routeIs('admin.user.index')">
         {{ __('user.users') }}
+    </x-jet-responsive-nav-link>
+
+    <x-jet-responsive-nav-link href="{{ route('admin.role.index') }}" :active="request()->routeIs('admin.role.index')">
+        {{ __('role.roles') }}
     </x-jet-responsive-nav-link>
 </div>
 

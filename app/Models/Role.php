@@ -36,4 +36,12 @@ class Role extends Model
         return $this->hasMany(User::class)->onlyTrashed();
     }
 
+    public function scopeSearch($query, $term){
+        $query->where(function ($query) use ($term){
+            $query->where('name','like', "%$term%")
+                ->orWhere('key','like', "%$term%")
+                ->orWhere('color','like', "%$term%");
+        });
+    }
+
 }
