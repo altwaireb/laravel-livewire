@@ -67,7 +67,6 @@ class RoleIndex extends Component
     }
 
 
-
     public function getItem(){
         $roles = Role::query();
         // * Search

@@ -12,7 +12,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12" wire:loading.remove>
+    <div class="py-12" wire:loading.remove >
         <div class="pr-0 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="p-5 overflow-hidden text-gray-800 shadow-xl lg:px-0 sm:px-10 bg-gray-50 sm:rounded-lg lg:rounded-3xl dark:bg-gray-900 dark:text-gray-400">
                 <div class="flex flex-wrap items-center">
@@ -212,6 +212,6 @@
         </div>
     </div>
 
-
+    <livewire:admin.role.role-create :permissions="$permissions" />
 
 </div>
