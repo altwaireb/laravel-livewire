@@ -19,7 +19,7 @@
                     <div class="relative flex-row flex-1 w-full max-w-full px-4">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300"> {{ __('user.users') }}</h3>
+                                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300"> {{ __('role.roles') }}</h3>
                             </div>
                             <div class="ml-4">
                                 @can('create' , \App\Models\Role::class)
@@ -213,5 +213,6 @@
     </div>
 
     <livewire:admin.role.role-create :permissions="$permissions" />
+    <livewire:admin.role.role-update :permissions="$permissions" />
 
 </div>

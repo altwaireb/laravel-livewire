@@ -4,12 +4,9 @@ namespace App\Http\Livewire\Admin\Role;
 
 use App\Models\Permission;
 use App\Models\Role;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RoleCreate extends Component
@@ -22,10 +19,9 @@ class RoleCreate extends Component
 
     public $name, $key,$color = 'bg-gray-700 text-white' , $permission = [];
 
+    public bool $showCreateModel = false;
 
     protected $listeners = ['showCreateModel'];
-
-    public bool $showCreateModel = false;
 
     protected function rules()
     {
@@ -63,7 +59,6 @@ class RoleCreate extends Component
             'key' => $this->key,
             'color' => $this->color,
         ];
-
 
         $role = Role::create($data);
 

@@ -1,29 +1,29 @@
 <div>
-    <x-jet-dialog-modal wire:model="showCreateModel">
+    <x-jet-dialog-modal wire:model="showUpdateModel">
         <x-slot name="title">
-            {{ __('app.create') }} {{ __('role.role') }}
+            {{ __('app.update') }} {{ __('role.role') }}
         </x-slot>
 
-        <form wire:submit.prevent="create" autocomplete="off">
+        <form wire:submit.prevent="edit" autocomplete="off">
 
             <x-slot name="content">
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
 
                     <div class="col-span-1 md:col-span-2 lg:col-span-3">
                         <x-jet-label for="name" value="{{ __('role.name') }}"/>
-                        <x-jet-input wire:model.defer="name" id="name" type="text" class="mt-1 block w-full" />
+                        <x-jet-input wire:model.defer="name" id="nameUpdate" type="text" class="mt-1 block w-full" />
                         <x-jet-input-error for="name" class="mt-2"/>
                     </div>
 
                     <div class="col-span-1 md:col-span-2 lg:col-span-3">
                         <x-jet-label for="key" value="{{ __('role.key') }}"/>
-                        <x-jet-input wire:model.defer="key" id="key" type="text" class="mt-1 block w-full" />
+                        <x-jet-input wire:model.defer="key" id="keyUpdate" type="text" class="mt-1 block w-full" />
                         <x-jet-input-error for="key" class="mt-2"/>
                     </div>
 
                     <div class="col-span-1 md:col-span-2 lg:col-span-3">
                         <x-jet-label for="color" value="{{ __('role.color') }}"/>
-                        <x-select-color wire:model="color" wire:key="colorCreate" />
+                        <x-select-color wire:model="color" wire:key="colorUpdate" />
                         <x-jet-input-error for="color" class="mt-2"/>
                     </div>
 
@@ -56,10 +56,10 @@
                                                 @if($permission->table_name === $value)
                                                     <label class="flex items-center px-2">
                                                         <x-jet-checkbox
-                                                        wire:model.defer="permission"
-                                                        value="{{ $permission->id }}"
-                                                        wire:key="permissionCreate{{$permission->id}}"
-                                                        class="w-6 h-6"
+                                                                wire:model.defer="permission"
+                                                                value="{{ $permission->id }}"
+                                                                wire:key="permissionUpdate{{$permission->id}}"
+                                                                class="w-6 h-6"
                                                         />
                                                         <span class="rtl:mr-2 ltr:ml2 text-sm text-gray-800 dark:text-gray-200">{{ $permission->name }}</span>
 
@@ -82,12 +82,12 @@
             </x-slot>
 
             <x-slot name="footer">
-                <x-jet-secondary-button wire:click="closeCreateModel" wire:loading.attr="disabled">
+                <x-jet-secondary-button wire:click="closeUpdateModel" wire:loading.attr="disabled">
                     {{ __('Cancel') }}
                 </x-jet-secondary-button>
 
-                <x-jet-button type="submit" wire:click="create" wire:loading.attr="disabled" class="ltr:ml-3 rtl:mr-3">
-                    {{ __('Save') }}
+                <x-jet-button type="submit" wire:click="edit" wire:loading.attr="disabled" class="ltr:ml-3 rtl:mr-3">
+                    {{ __('app.update') }}
                 </x-jet-button>
             </x-slot>
         </form>

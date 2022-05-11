@@ -1,5 +1,4 @@
 <div>
-    <!-- API Token Permissions Modal -->
     <x-jet-dialog-modal wire:model="showUpdateModel">
         <x-slot name="title">
             {{ __('app.update') }} {{ __('user.user') }}
