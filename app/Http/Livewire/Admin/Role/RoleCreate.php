@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Role;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Traits\ToastAlert;
 use Illuminate\Validation\Rule;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class RoleCreate extends Component
 {
 
-    use InteractsWithBanner;
+    use ToastAlert;
     use AuthorizesRequests;
 
     public $permissions;
@@ -68,7 +69,7 @@ class RoleCreate extends Component
         }
 
         $this->closeCreateModel();
-        $this->banner(__('role.create role'));
+        $this->toast(__('role.create role'));
         $this->emit('refreshParent');
 
     }

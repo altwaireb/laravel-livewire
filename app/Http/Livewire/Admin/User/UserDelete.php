@@ -3,13 +3,14 @@
 namespace App\Http\Livewire\Admin\User;
 
 use App\Models\User;
+use App\Traits\ToastAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Laravel\Jetstream\InteractsWithBanner;
 
 class UserDelete extends Component
 {
-    use InteractsWithBanner;
+    use ToastAlert;
     use AuthorizesRequests;
 
 
@@ -37,7 +38,7 @@ class UserDelete extends Component
         $this->reset();
         $this->closeDeleteModel();
         $this->emit('refreshParent');
-        $this->banner( __('user.delete user') );
+        $this->toast(__('user.delete user'));
 
     }
 
@@ -57,7 +58,7 @@ class UserDelete extends Component
         $this->reset();
         $this->closeRestoreModel();
         $this->emit('refreshParent');
-        $this->banner( __('user.restore user') );
+        $this->toast(__('user.restore user'));
     }
 
     public function showForceDeleteModel($itemid){
@@ -76,7 +77,7 @@ class UserDelete extends Component
         $this->reset();
         $this->closeForceDeleteModel();
         $this->emit('refreshParent');
-        $this->banner( __('user.force delete user') );
+        $this->toast(__('user.force delete user'));
     }
 
 

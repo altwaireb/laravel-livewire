@@ -4,16 +4,16 @@ namespace App\Http\Livewire\Admin\User;
 
 use App\Models\City;
 use App\Models\User;
+use App\Traits\ToastAlert;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
-use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\WithFileUploads;
 
 class UserCreate extends Component
 {
-    use InteractsWithBanner;
     use WithFileUploads;
+    use ToastAlert;
 
     public $countries;
     public $roles;
@@ -78,7 +78,7 @@ class UserCreate extends Component
 
         User::create($data);
         $this->closeCreateModel();
-        $this->banner(__('user.create user'));
+        $this->toast(__('user.create user'));
         $this->emit('refreshParent');
 
     }

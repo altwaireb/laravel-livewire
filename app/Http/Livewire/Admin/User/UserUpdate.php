@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\User;
 
 use App\Models\City;
 use App\Models\User;
+use App\Traits\ToastAlert;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
@@ -11,7 +12,7 @@ use Livewire\WithFileUploads;
 
 class UserUpdate extends Component
 {
-    use InteractsWithBanner;
+    use ToastAlert;
     use WithFileUploads;
 
     public $countries;
@@ -96,7 +97,7 @@ class UserUpdate extends Component
 
         User::where('id',$this->itemId)->update($data);
         $this->closeUpdateModel();
-        $this->banner(__('user.update user'));
+        $this->toast(__('user.update user'));
         $this->emit('refreshParent');
 
     }

@@ -5,14 +5,14 @@ namespace App\Http\Livewire\Admin\Role;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Validation\Rule;
-use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
+use App\Traits\ToastAlert;
 
 class RoleUpdate extends Component
 {
-    use InteractsWithBanner;
     use AuthorizesRequests;
+    use ToastAlert;
+
 
     public $permissions;
     public $itemId;
@@ -21,7 +21,7 @@ class RoleUpdate extends Component
 
     public bool $showUpdateModel = false;
 
-    protected $listeners = ['showUpdateModel'];
+    protected $listeners = ['showUpdateModel'=>'showUpdateModel'];
 
     protected function rules()
     {
@@ -77,7 +77,7 @@ class RoleUpdate extends Component
         }
 
         $this->closeUpdateModel();
-        $this->banner(__('role.update role'));
+        $this->toast(__('role.update role'));
         $this->emit('refreshParent');
 
     }

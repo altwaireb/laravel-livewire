@@ -28,7 +28,8 @@
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
-        <x-jet-banner />
+    <x-jet-banner />
+    <x-toast-alert />
 
         <div class="min-h-screen bg-gray-200 dark:bg-gray-700">
             @include('layouts.nav.admin.navigation-menu')
